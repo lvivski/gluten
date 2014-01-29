@@ -1,0 +1,31 @@
+{
+	"name": "rake",
+	"version": "0.0.1",
+	"author": "Yehor Lvivski <lvivski@gmail.com>",
+	"description": "Javascript builder for components",
+	"keywords": [
+		"make",
+		"build",
+		"bundle",
+		"components"
+	],
+	"bin": "bin/rake",
+	"main": "index.js",
+	"dependencies": {
+		"davy": "~0.1.0",
+
+		"browserify": "~3.24.1",
+		"browserify-shim": "~2.0.8",
+		"partialify": "~2.0.1",
+
+		"autoprefixer": "~0.8.20131209",
+		"rework": "~0.20.1",
+		"rework-calc": "~0.2.1",
+		"rework-color-function": "0.1.2",
+		"rework-vars": "2.0.2",
+		"rework-npm": "~0.3.0",
+
+		"commander": "~2.1.0"
+	},
+	"license": "MIT"
+}
