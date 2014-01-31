@@ -15,8 +15,6 @@
 		"davy": "~0.1.0",
 
 		"browserify": "~3.24.1",
-		"browserify-shim": "~2.0.8",
-		"partialify": "~2.0.1",
 
 		"autoprefixer": "~0.8.20131209",
 		"rework": "~0.20.1",

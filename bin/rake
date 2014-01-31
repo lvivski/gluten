@@ -14,34 +14,21 @@ program
 	.usage('-c main.css -j app.js -o bundle')
 	.option('-c, --css [file]', 'css', pkg.style)
 	.option('-j, --js [file]', 'js', pkg.main)
-	.option('-s, --shim [file]', 'shim', pkg.shim)
 	.option('-o, --output [name]', 'output', 'bundle')
 	.parse(process.argv)
 
 if (program.js) {
 	var options = {
-	    	entry: expand(program.js)
+	    	entry: program.js,
+	    	basedir: process.cwd()
 	    }
-
-	if (program.shim) {
-		options.shim = function () {
-			var shim = typeof program.shim === 'string' 
-			         ? require(expand(program.shim))
-			         : program.shim
-
-			for (var i in shim) {
-				shim[i].path = expand(shim[i].path)
-			}
-
-			return shim
-		}()
-	}
 
 	rake.js(options)
 		.then(function (src) {
 			fs.writeFile(program.output + '.js', src)
 		}).catch(function (err) {
-			console.error(err.stack)
+			console.error(err)
+			err.stack && console.error(err.stack)
 		})
 }
 
@@ -52,7 +39,8 @@ if (program.css) {
 		.then(function (src) {
 			fs.writeFile(program.output + '.css', src)
 		}).catch(function (err) {
-			console.error(err.stack)
+			console.error(err)
+			err.stack && console.error(err.stack)
 		})
 }
 

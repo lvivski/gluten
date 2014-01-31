@@ -1,6 +1,4 @@
 var browserify = require('browserify'),
-    browserifyShim = require('browserify-shim'),
-    partialify = require('partialify'),
 
     rework = require('rework'),
     reworkNpm = require('rework-npm'),
@@ -16,11 +14,13 @@ var browserify = require('browserify'),
 exports.js = function (options) {
 	options = options || {}
 
-	var shim = browserifyShim(browserify(), options.shim || {})
-	shim.require(require.resolve(options.entry), {entry: true})
-	shim.transform(partialify)
+	var b = browserify({
+		basedir: options.basedir
+	})
 
-	return Davy.wrap(shim.bundle.bind(shim))({debug: false})
+	b.require('./' + options.entry, {entry: true})
+
+	return Davy.wrap(b.bundle.bind(b))({debug: false})
 }
 
 exports.css = function (options) {
