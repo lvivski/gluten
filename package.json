@@ -1,5 +1,5 @@
 {
-	"name": "rake",
+	"name": "gluten",
 	"version": "0.0.2",
 	"author": "Yehor Lvivski <lvivski@gmail.com>",
 	"description": "Javascript builder for components",
@@ -9,7 +9,10 @@
 		"bundle",
 		"components"
 	],
-	"bin": "bin/rake",
+	"bin": {
+		"glue": "bin/gluten",
+		"gluten": "bin/gluten"
+	},
 	"main": "index.js",
 	"dependencies": {
 		"davy": "~0.1.0",

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-var rake = require('..'),
+var gluten = require('..'),
     program = require('commander'),
     fs = require('fs'),
     path = require('path'),
@@ -23,7 +23,7 @@ if (program.js) {
 	    	basedir: process.cwd()
 	    }
 
-	rake.js(options)
+	gluten.js(options)
 		.then(function (src) {
 			fs.writeFile(program.output + '.js', src)
 		}).catch(function (err) {
@@ -33,7 +33,7 @@ if (program.js) {
 }
 
 if (program.css) {
-	rake.css({
+	gluten.css({
 			entry: expand(program.css)
 		})
 		.then(function (src) {

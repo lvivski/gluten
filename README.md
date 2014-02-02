@@ -1,28 +1,33 @@
-# Start
+# Gluten
 
-A new way to build modular web apps
+Gluten \ˈglü-tən\ is a great utility to help you build modular apps.
+
+## Usage
+
+Just run `glue` or `gluten` command inside a directory with your top-level package.
+
+## Configuration
+
+All your modules are configured through the `package.json`.
+
+```js
+{
+  "name": "you-module-name"
+  "main": "index.js",
+  "style": "index.css"
+}
+```
+
+## Features
+
+Gluten uses `browserify` to compile your JS files and `rework-npm` for your CSS files.
+
+There are several `rework` transformers that are used by default:
+- `autoprefixer` — vendor prefixes
+- `rework-vars` — css variables supports
+- `rework-calc` — `calc()`
+- `rework-color-function` — easy color modifications
 
 ## License
 
-(The MIT License)
-
-Copyright (c) 2014 Yehor Lvivski <lvivski@gmail.com>
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-'Software'), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+The MIT License
