@@ -14,6 +14,7 @@ program
 	.usage('-c main.css -j app.js -o bundle')
 	.option('-c, --css [file]', 'css', pkg.style)
 	.option('-j, --js [file]', 'js', pkg.main)
+	.option('-f, --files [file]', 'files', pkg.files)
 	.option('-o, --output [name]', 'output', 'bundle')
 	.parse(process.argv)
 
@@ -42,6 +43,12 @@ if (program.css) {
 			console.error(err)
 			err.stack && console.error(err.stack)
 		})
+}
+
+if (program.files) {
+	gluten.files({
+		files: program.files
+	})
 }
 
 

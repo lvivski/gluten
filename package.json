@@ -25,6 +25,7 @@
 		"rework-color-function": "0.1.2",
 		"rework-vars": "2.0.2",
 		"rework-npm": "~0.3.0",
+		"rework-inherit": "~0.2.1",
 
 		"commander": "~2.1.0"
 	},
