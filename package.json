@@ -20,6 +20,7 @@
     "browserify": "^11.0.1",
     "browserify-shim": "^3.8.10",
     "chokidar": "^1.0.5",
+    "colors": "^1.1.2",
     "commander": "^2.8.1",
     "envify": "^3.4.0",
     "es6-promise": "^3.0.2",

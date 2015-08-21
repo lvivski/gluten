@@ -1,15 +1,15 @@
 require('es6-promise').polyfill();
 
 var fs = require('fs'),
-	path = require('path'),
+	path = require('path');
 
-	browserify = require('browserify'),
+var browserify = require('browserify'),
 	watchify = require('watchify'),
 	babelify = require('babelify'),
 	envify = require('envify'),
-	browserifyShim = require('browserify-shim'),
+	browserifyShim = require('browserify-shim');
 
-	postcss = require('postcss'),
+var	postcss = require('postcss'),
 	chokidar = require('chokidar'),
 	autoprefixer = require('autoprefixer'),
 	postcssCalc = require('postcss-calc'),
@@ -17,6 +17,13 @@ var fs = require('fs'),
 	postcssImport = require('postcss-import'),
 	postcssNested = require('postcss-nested'),
 	postcssUrl = require('postcss-url');
+
+var colors = require('colors');
+colors.setTheme({
+	file: 'gray',
+	info: 'cyan',
+	built: 'green'
+});
 
 exports.js = function (options) {
 	options = options || {};
@@ -32,13 +39,12 @@ exports.js = function (options) {
 
 	if (options.watch) {
 		var watcher = watchify(bundler);
-		watcher.on('update', function () {
+		watcher.on('update', function (files) {
+			files.forEach(changed);
 			watcher
-				.bundle(function () {
-					console.log('js changed');
-				})
-				.pipe(fs.createWriteStream(path.resolve(process.cwd(), options.output)))
-		})
+				.bundle(built('JS'))
+				.pipe(fs.createWriteStream(path.resolve(process.cwd(), options.output)));
+		});
 	}
 
 	bundler
@@ -54,10 +60,8 @@ exports.js = function (options) {
 
 	bundler
 		.transform(envify)
-		.bundle(function () {
-			console.log('js build');
-		})
-		.pipe(fs.createWriteStream(path.resolve(process.cwd(), options.output)));
+		.bundle(built('JS'))
+		.pipe(fs.createWriteStream(absolute(options.output)));
 };
 
 exports.css = function (options) {
@@ -69,8 +73,8 @@ exports.css = function (options) {
 	if (options.watch) {
 		var watcher = chokidar.watch(watchedFiles);
 
-		watcher.on('change', function () {
-			console.log('css changed');
+		watcher.on('change', function (file) {
+			changed(file);
 			processFiles(processor, options);
 		});
 
@@ -78,7 +82,7 @@ exports.css = function (options) {
 			watcher.unwatch(watchedFiles);
 			watcher.add(files);
 			watchedFiles = files;
-		}
+		};
 	}
 
 	var processor = postcss([
@@ -98,11 +102,29 @@ exports.css = function (options) {
 		.use(postcssUrl({
 			url: 'copy',
 			useHash: true,
-			assetsPath: 'assets'
+			assetsPath: options.assets
 		}));
 
 	processFiles(processor, options);
 };
+
+function relative(file) {
+	return path.relative(process.cwd(), file);
+}
+
+function absolute(file) {
+	return path.resolve(process.cwd(), file);
+}
+
+function changed(file) {
+	console.log('Changed: '.info + relative(file).file);
+}
+
+function built(file) {
+	return function () {
+		console.log('Built: '.built + file.file);
+	}
+}
 
 function processFiles(processor, options) {
 	var css = fs.readFileSync(options.entry, "utf8");
@@ -110,6 +132,7 @@ function processFiles(processor, options) {
 	processor
 		.process(css, {from: options.entry, to: options.output})
 		.then(function (result) {
+			built('CSS')();
 			fs.writeFileSync(options.output, result.css);
 		});
 }

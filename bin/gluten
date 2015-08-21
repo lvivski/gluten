@@ -1,21 +1,21 @@
 #!/usr/bin/env node
 
-var gluten = require('..'),
+var gluten = require('../'),
     program = require('commander'),
-    fs = require('fs'),
     path = require('path'),
     pkg = require(path.resolve('package.json'));
 
 program
 	.version(require('../package.json').version)
 	.usage('-c main.css -j app.js -o bundle')
-	.option('-c, --css [file]', 'input CSS file', pkg.style)
 	.option('-j, --js [file]', 'input JS file', pkg.main)
+	.option('-c, --css [file]', 'input CSS file', pkg.style)
+	.option('-a, --assets [folder]', 'assets folder', 'assets')
 	.option('-o, --output [folder]', 'output folder', 'dist')
 	.option('-jo, --jsout [file]', 'JS output file', 'dist/bundle.js')
 	.option('-co, --cssout [file]', 'CSS output file', 'dist/bundle.css')
 	.option('-w, --watch', 'watch files for changes', 'false', Boolean)
-	.parse(process.argv)
+	.parse(process.argv);
 
 if (program.js) {
 	gluten.js({
@@ -30,7 +30,8 @@ if (program.css) {
 	gluten.css({
 		entry: program.css,
 		output: program.cssout || path.resolve(program.output, 'bundle.css'),
-		watch: program.watch
+		watch: program.watch,
+		assets: program.assets
 	});
 }
 
