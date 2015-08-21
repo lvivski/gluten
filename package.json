@@ -19,6 +19,7 @@
     "babelify": "^6.2.0",
     "browserify": "^11.0.1",
     "browserify-shim": "^3.8.10",
+    "bundle-collapser": "^1.2.1",
     "chokidar": "^1.0.5",
     "colors": "^1.1.2",
     "commander": "^2.8.1",
