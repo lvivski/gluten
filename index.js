@@ -7,7 +7,8 @@ var browserify = require('browserify'),
 	watchify = require('watchify'),
 	babelify = require('babelify'),
 	envify = require('envify'),
-	browserifyShim = require('browserify-shim');
+	browserifyShim = require('browserify-shim'),
+	bundleCollapser = require('bundle-collapser/plugin');
 
 var	postcss = require('postcss'),
 	chokidar = require('chokidar'),
@@ -22,7 +23,8 @@ var colors = require('colors');
 colors.setTheme({
 	file: 'gray',
 	info: 'cyan',
-	built: 'green'
+	built: 'green',
+	error: 'red'
 });
 
 exports.js = function (options) {
@@ -43,6 +45,7 @@ exports.js = function (options) {
 			files.forEach(changed);
 			watcher
 				.bundle(built('JS'))
+				.on('error', error)
 				.pipe(fs.createWriteStream(path.resolve(process.cwd(), options.output)));
 		});
 	}
@@ -60,7 +63,9 @@ exports.js = function (options) {
 
 	bundler
 		.transform(envify)
+		.plugin(bundleCollapser)
 		.bundle(built('JS'))
+		.on('error', error)
 		.pipe(fs.createWriteStream(absolute(options.output)));
 };
 
@@ -124,6 +129,11 @@ function built(file) {
 	return function () {
 		console.log('Built: '.built + file.file);
 	}
+}
+
+function error(error) {
+	console.log('Error: '.red);
+	console.log(error.codeFrame);
 }
 
 function processFiles(processor, options) {

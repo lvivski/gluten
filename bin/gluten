@@ -12,9 +12,9 @@ program
 	.option('-c, --css [file]', 'input CSS file', pkg.style)
 	.option('-a, --assets [folder]', 'assets folder', 'assets')
 	.option('-o, --output [folder]', 'output folder', 'dist')
-	.option('-jo, --jsout [file]', 'JS output file', 'dist/bundle.js')
-	.option('-co, --cssout [file]', 'CSS output file', 'dist/bundle.css')
-	.option('-w, --watch', 'watch files for changes', 'false', Boolean)
+	.option('-jo, --jsout [file]', 'JS output file')
+	.option('-co, --cssout [file]', 'CSS output file')
+	.option('-w, --watch', 'watch files for changes')
 	.parse(process.argv);
 
 if (program.js) {
