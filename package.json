@@ -1,33 +1,35 @@
 {
-	"name": "gluten",
-	"version": "0.0.2",
-	"author": "Yehor Lvivski <lvivski@gmail.com>",
-	"description": "Javascript builder for components",
-	"keywords": [
-		"make",
-		"build",
-		"bundle",
-		"components"
-	],
-	"bin": {
-		"glue": "bin/gluten",
-		"gluten": "bin/gluten"
-	},
-	"main": "index.js",
-	"dependencies": {
-		"davy": "~0.1.0",
-
-		"browserify": "~3.24.1",
-
-		"autoprefixer": "~0.8.20131209",
-		"rework": "~0.20.1",
-		"rework-calc": "~0.2.1",
-		"rework-color-function": "0.1.2",
-		"rework-vars": "2.0.2",
-		"rework-npm": "~0.3.0",
-		"rework-inherit": "~0.2.1",
-
-		"commander": "~2.1.0"
-	},
-	"license": "MIT"
+  "name": "gluten",
+  "version": "0.0.2",
+  "author": "Yehor Lvivski <lvivski@gmail.com>",
+  "description": "Javascript builder for components",
+  "keywords": [
+    "make",
+    "build",
+    "bundle",
+    "components"
+  ],
+  "bin": {
+    "glue": "bin/gluten",
+    "gluten": "bin/gluten"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "autoprefixer": "^5.2.0",
+    "babelify": "^6.2.0",
+    "browserify": "^11.0.1",
+    "browserify-shim": "^3.8.10",
+    "chokidar": "^1.0.5",
+    "commander": "^2.8.1",
+    "envify": "^3.4.0",
+    "es6-promise": "^3.0.2",
+    "postcss": "^4.1.16",
+    "postcss-calc": "^4.1.0",
+    "postcss-custom-properties": "^4.2.0",
+    "postcss-import": "^6.2.0",
+    "postcss-nested": "^0.3.2",
+    "postcss-url": "^4.0.1",
+    "watchify": "^3.3.1"
+  },
+  "license": "MIT"
 }

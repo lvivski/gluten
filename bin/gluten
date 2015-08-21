@@ -4,51 +4,34 @@ var gluten = require('..'),
     program = require('commander'),
     fs = require('fs'),
     path = require('path'),
-    expand = function (file) {
-    	return path.join(process.cwd(), file)
-    },
-    pkg = require(expand('package.json'))
+    pkg = require(path.resolve('package.json'));
 
 program
 	.version(require('../package.json').version)
 	.usage('-c main.css -j app.js -o bundle')
-	.option('-c, --css [file]', 'css', pkg.style)
-	.option('-j, --js [file]', 'js', pkg.main)
-	.option('-f, --files [file]', 'files', pkg.files)
-	.option('-o, --output [name]', 'output', 'bundle')
+	.option('-c, --css [file]', 'input CSS file', pkg.style)
+	.option('-j, --js [file]', 'input JS file', pkg.main)
+	.option('-o, --output [folder]', 'output folder', 'dist')
+	.option('-jo, --jsout [file]', 'JS output file', 'dist/bundle.js')
+	.option('-co, --cssout [file]', 'CSS output file', 'dist/bundle.css')
+	.option('-w, --watch', 'watch files for changes', 'false', Boolean)
 	.parse(process.argv)
 
 if (program.js) {
-	var options = {
-	    	entry: program.js,
-	    	basedir: process.cwd()
-	    }
-
-	gluten.js(options)
-		.then(function (src) {
-			fs.writeFile(program.output + '.js', src)
-		}).catch(function (err) {
-			console.error(err)
-			err.stack && console.error(err.stack)
-		})
+	gluten.js({
+		entry: program.js,
+		output: program.jsout || path.resolve(program.output, 'bundle.js'),
+		watch: program.watch,
+		shim: Boolean(pkg['browserify-shim'])
+	});
 }
 
 if (program.css) {
 	gluten.css({
-			entry: expand(program.css)
-		})
-		.then(function (src) {
-			fs.writeFile(program.output + '.css', src)
-		}).catch(function (err) {
-			console.error(err)
-			err.stack && console.error(err.stack)
-		})
-}
-
-if (program.files) {
-	gluten.files({
-		files: program.files
-	})
+		entry: program.css,
+		output: program.cssout || path.resolve(program.output, 'bundle.css'),
+		watch: program.watch
+	});
 }
 
 
