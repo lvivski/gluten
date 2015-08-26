@@ -32,6 +32,8 @@ exports.js = function (options) {
 	if (options.watch) {
 		assign(options, watchify.args);
 	}
+	
+	options.builtins = false;
 
 	var bundler = browserify(options);
 
@@ -47,14 +49,14 @@ exports.js = function (options) {
 	}
 
 	bundler
-		.transform(filter(envify), {global: true})
-		.transform(filter(babelify.configure({
+		.transform(envify, {global: true})
+		.transform(babelify.configure({
 			loose: ['es6.modules'],
 			sourceMapRelative: '.'
-		})), {global: true});
+		}), {global: true});
 
 	if (options.shim) {
-		bundler.transform(filter(browserifyShim), {global: true});
+		bundler.transform(browserifyShim, {global: true});
 	}
 
 	bundler
@@ -151,15 +153,6 @@ function processFiles(processor, options) {
 			built('CSS')();
 			fs.writeFileSync(options.output, result.css);
 		});
-}
-
-function filter(transform) {
-	return function (filename) {
-		if (filename.indexOf('node_modules') !== -1 && filename.indexOf('@spatialkey') === -1) {
-			return through();
-		}
-		return transform.apply(null, arguments);
-	}
 }
 
 function assign(obj) {
