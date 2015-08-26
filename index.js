@@ -17,15 +17,10 @@ var	postcss = require('postcss'),
 	postcssCustomProperties = require('postcss-custom-properties'),
 	postcssImport = require('postcss-import'),
 	postcssNested = require('postcss-nested'),
-	postcssUrl = require('postcss-url');
+	postcssUrl = require('postcss-url'),
+	postcssReporter = require('postcss-reporter');
 
-var colors = require('colors');
-colors.setTheme({
-	file: 'gray',
-	info: 'cyan',
-	built: 'green',
-	error: 'red'
-});
+var colors = require('colors/safe');
 
 exports.js = function (options) {
 	options = options || {};
@@ -102,13 +97,24 @@ exports.css = function (options) {
 					'> 1%',
 					'IE 8'
 				]
+			}),
+			postcssUrl({
+						url: 'copy',
+						useHash: true,
+						assetsPath: options.assets
+					}),
+			postcssReporter({
+				formatter: function(input) {
+					if (input.messages.length) {
+						return colors.yellow('Warn: ') + colors.gray(input.source) + '\n' +
+							input.messages.map(function (message) {
+								return ' ' + colors.yellow(message.plugin) + ' ' + message.text;
+							}).join('\n');
+					} 
+					return ''
+				}
 			})
-		])
-		.use(postcssUrl({
-			url: 'copy',
-			useHash: true,
-			assetsPath: options.assets
-		}));
+		]);
 
 	processFiles(processor, options);
 };
@@ -122,18 +128,17 @@ function absolute(file) {
 }
 
 function changed(file) {
-	console.log('Changed: '.info + relative(file).file);
+	console.log(colors.cyan('Changed: ') + colors.gray(relative(file)));
 }
 
 function built(file) {
 	return function () {
-		console.log('Built: '.built + file.file);
+		console.log(colors.green('Built: ') + colors.gray(file));
 	}
 }
 
 function error(error) {
-	console.log('Error: '.red);
-	console.log(error.codeFrame);
+	console.log(colors.red('Error: ') + (error.codeFrame || error));
 }
 
 function processFiles(processor, options) {

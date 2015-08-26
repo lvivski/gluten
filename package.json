@@ -30,6 +30,7 @@
     "postcss-custom-properties": "^4.2.0",
     "postcss-import": "^6.2.0",
     "postcss-nested": "^0.3.2",
+    "postcss-reporter": "^0.4.0",
     "postcss-url": "^4.0.1",
     "watchify": "^3.3.1"
   },
