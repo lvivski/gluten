@@ -12,8 +12,8 @@ program
 	.option('-c, --css [file]', 'input CSS file', pkg.style)
 	.option('-a, --assets [folder]', 'assets folder', 'assets')
 	.option('-o, --output [folder]', 'output folder', 'dist')
-	.option('-jo, --jsout [file]', 'JS output file')
-	.option('-co, --cssout [file]', 'CSS output file')
+	.option('--jsout [file]', 'JS output file')
+	.option('--cssout [file]', 'CSS output file')
 	.option('-w, --watch', 'watch files for changes')
 	.parse(process.argv);
 
