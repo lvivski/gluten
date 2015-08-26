@@ -34,6 +34,7 @@ exports.js = function (options) {
 	}
 	
 	options.builtins = false;
+	options.detectGlobals = false;
 
 	var bundler = browserify(options);
 
