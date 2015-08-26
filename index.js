@@ -8,7 +8,8 @@ var browserify = require('browserify'),
 	babelify = require('babelify'),
 	envify = require('envify'),
 	browserifyShim = require('browserify-shim'),
-	bundleCollapser = require('bundle-collapser/plugin');
+	bundleCollapser = require('bundle-collapser/plugin'),
+	through = require('through');
 
 var	postcss = require('postcss'),
 	chokidar = require('chokidar'),
@@ -46,19 +47,19 @@ exports.js = function (options) {
 	}
 
 	bundler
-		.add(path.resolve(process.cwd(), options.entry))
-		.transform(babelify.configure({
+		.transform(filter(envify), {global: true})
+		.transform(filter(babelify.configure({
 			loose: ['es6.modules'],
 			sourceMapRelative: '.'
-		}));
+		})), {global: true});
 
 	if (options.shim) {
-		bundler.transform(browserifyShim);
+		bundler.transform(filter(browserifyShim), {global: true});
 	}
 
 	bundler
-		.transform(envify)
 		.plugin(bundleCollapser)
+		.require(path.resolve(process.cwd(), options.entry), {entry: true})
 		.bundle(built('JS'))
 		.on('error', error)
 		.pipe(fs.createWriteStream(absolute(options.output)));
@@ -150,6 +151,15 @@ function processFiles(processor, options) {
 			built('CSS')();
 			fs.writeFileSync(options.output, result.css);
 		});
+}
+
+function filter(transform) {
+	return function (filename) {
+		if (filename.indexOf('node_modules') !== -1 && filename.indexOf('@spatialkey') === -1) {
+			return through();
+		}
+		return transform.apply(null, arguments);
+	}
 }
 
 function assign(obj) {
