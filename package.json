@@ -1,6 +1,6 @@
 {
   "name": "gluten",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "author": "Yehor Lvivski <lvivski@gmail.com>",
   "description": "Javascript builder for components",
   "keywords": [
