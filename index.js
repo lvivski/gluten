@@ -8,10 +8,9 @@ var browserify = require('browserify'),
 	babelify = require('babelify'),
 	envify = require('envify'),
 	browserifyShim = require('browserify-shim'),
-	bundleCollapser = require('bundle-collapser/plugin'),
-	through = require('through');
+	bundleCollapser = require('bundle-collapser/plugin');
 
-var	postcss = require('postcss'),
+var postcss = require('postcss'),
 	chokidar = require('chokidar'),
 	autoprefixer = require('autoprefixer'),
 	postcssCalc = require('postcss-calc'),
@@ -32,7 +31,7 @@ exports.js = function (options) {
 	if (options.watch) {
 		assign(options, watchify.args);
 	}
-	
+
 	options.builtins = false;
 	options.detectGlobals = false;
 
@@ -103,10 +102,9 @@ exports.css = function (options) {
 				]
 			}),
 			postcssUrl({
-						url: 'copy',
-						useHash: true,
-						assetsPath: options.assets
-					}),
+				url: 'copy',
+				useHash: true
+			}),
 			postcssReporter({
 				formatter: function(input) {
 					if (input.messages.length) {
@@ -114,7 +112,7 @@ exports.css = function (options) {
 							input.messages.map(function (message) {
 								return ' ' + colors.yellow(message.plugin) + ' ' + message.text;
 							}).join('\n');
-					} 
+					}
 					return ''
 				}
 			})
