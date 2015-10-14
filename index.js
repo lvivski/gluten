@@ -73,8 +73,6 @@ exports.css = function (options) {
 	var watchedFiles = [],
 		postcssWatch = function () {};
 
-	console.log(options);
-
 	if (options.watch) {
 		var watcher = chokidar.watch(watchedFiles);
 
