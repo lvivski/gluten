@@ -73,6 +73,8 @@ exports.css = function (options) {
 	var watchedFiles = [],
 		postcssWatch = function () {};
 
+	console.log(options);
+
 	if (options.watch) {
 		var watcher = chokidar.watch(watchedFiles);
 
@@ -103,7 +105,8 @@ exports.css = function (options) {
 			}),
 			postcssUrl({
 				url: 'copy',
-				useHash: true
+				useHash: true,
+				assetsPath: options.assets
 			}),
 			postcssReporter({
 				formatter: function(input) {
