@@ -98,6 +98,7 @@ exports.css = function (options) {
 			autoprefixer({
 				browsers: [
 					'> 1%',
+					'last 2 versions',
 					'IE 8'
 				]
 			}),
