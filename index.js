@@ -19,15 +19,16 @@ var postcss = require('postcss'),
 	postcssNested = require('postcss-nested'),
 	postcssUrl = require('postcss-url'),
 	postcssReporter = require('postcss-reporter');
+    
+var babelPresetEs2015 = require('babel-preset-es2015-loose'),
+	babelPresetReact = require('babel-preset-react'),
+    babelPresetStage2 = require('babel-preset-stage-2');
 
 var colors = require('colors/safe');
 
 exports.js = function (options) {
 	options = options || {};
 
-	if (process.env.NODE_ENV === 'development') {
-		options.debug = true;
-	}
 	if (options.watch) {
 		assign(options, watchify.args);
 	}
@@ -43,27 +44,34 @@ exports.js = function (options) {
 			files.forEach(changed);
 			watcher
 				.bundle(built('JS'))
-				.on('error', error)
-				.pipe(fs.createWriteStream(path.resolve(process.cwd(), options.output)));
+				.on('error', errorLogger(false))
+				.pipe(fs.createWriteStream(absolute(options.output)));
 		});
 	}
 
 	bundler
 		.transform(envify, {global: true})
-		.transform(babelify.configure({
-			loose: ['es6.modules'],
-			sourceMapRelative: '.'
-		}), {global: true});
+        .transform(babelify.configure({
+			presets: [
+				babelPresetEs2015,
+                babelPresetStage2,
+				babelPresetReact,
+			],
+            sourceMapRelative: '.'
+		}), {global: true})
 
 	if (options.shim) {
 		bundler.transform(browserifyShim, {global: true});
 	}
+    
+    if (!options.watch) {
+        bundler.plugin(bundleCollapser)
+    }
 
 	bundler
-		.plugin(bundleCollapser)
-		.require(path.resolve(process.cwd(), options.entry), {entry: true})
+		.require(absolute(options.entry), {entry: true})
 		.bundle(built('JS'))
-		.on('error', error)
+		.on('error', errorLogger(!options.watch))
 		.pipe(fs.createWriteStream(absolute(options.output)));
 };
 
@@ -141,9 +149,13 @@ function built(file) {
 	}
 }
 
-function error(error) {
-	console.log(colors.red('Error: ') + (error.codeFrame || error));
-	process.exit(1);
+function errorLogger(exit) {
+    return function (error) {
+	   console.log(colors.red('Error: ') + (error.codeFrame || error));
+       if (exit) {
+           process.exit(1);
+       }
+    }
 }
 
 function processFiles(processor, options) {

@@ -12,9 +12,10 @@ program
 	.option('-c, --css [file]', 'input CSS file', pkg.style)
 	.option('-a, --assets [folder]', 'assets folder', 'assets')
 	.option('-o, --output [folder]', 'output folder', 'dist')
-	.option('--jsout [file]', 'JS output file')
+    .option('--jsout [file]', 'JS output file')
 	.option('--cssout [file]', 'CSS output file')
 	.option('-w, --watch', 'watch files for changes')
+    .option('-d, --debug', 'create sourcemaps')
 	.parse(process.argv);
 
 if (program.js) {
@@ -22,6 +23,7 @@ if (program.js) {
 		entry: program.js,
 		output: program.jsout || path.resolve(program.output, 'bundle.js'),
 		watch: program.watch,
+        debug: program.debug,
 		shim: Boolean(pkg['browserify-shim'])
 	});
 }
