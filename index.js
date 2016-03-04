@@ -143,6 +143,7 @@ function built(file) {
 
 function error(error) {
 	console.log(colors.red('Error: ') + (error.codeFrame || error));
+	process.exit(1);
 }
 
 function processFiles(processor, options) {
