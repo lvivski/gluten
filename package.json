@@ -16,7 +16,7 @@
   "main": "index.js",
   "dependencies": {
     "autoprefixer": "^6.0.0",
-    "babel-preset-es2015-loose": "^6.1.14",
+    "babel-preset-es2015-loose": "^6.1.4",
     "babel-preset-react": "^6.3.13",
     "babel-preset-stage-2": "^6.3.13",
     "babelify": "^7.0.0",
