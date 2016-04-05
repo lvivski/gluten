@@ -7,6 +7,7 @@ var browserify = require('browserify'),
 	watchify = require('watchify'),
 	babelify = require('babelify'),
 	envify = require('envify'),
+    es3ify = require('es3ify'),
 	browserifyShim = require('browserify-shim'),
 	bundleCollapser = require('bundle-collapser/plugin');
 
@@ -59,6 +60,7 @@ exports.js = function (options) {
 			],
             sourceMapRelative: '.'
 		}), {global: true})
+        .transform(es3ify, {global: true})
 
 	if (options.shim) {
 		bundler.transform(browserifyShim, {global: true});
