@@ -16,6 +16,7 @@ program
 	.option('--cssout [file]', 'CSS output file')
 	.option('-w, --watch', 'watch files for changes')
     .option('-d, --debug', 'create sourcemaps')
+    .option('-h, --hot', 'React hot module replacement')
 	.parse(process.argv);
 
 if (program.js) {
@@ -24,6 +25,7 @@ if (program.js) {
 		output: program.jsout || path.resolve(program.output, 'bundle.js'),
 		watch: program.watch,
         debug: program.debug,
+        hot: program.hot,
 		shim: Boolean(pkg['browserify-shim'])
 	});
 }
@@ -33,7 +35,9 @@ if (program.css) {
 		entry: program.css,
 		output: program.cssout || path.resolve(program.output, 'bundle.css'),
 		watch: program.watch,
-		assets: program.assets
+    debug: program.debug,
+    hot: program.hot,
+    assets: program.assets
 	});
 }
 
