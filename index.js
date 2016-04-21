@@ -11,6 +11,7 @@ var browserify = require('browserify'),
 	browserifyShim = require('browserify-shim'),
 	bundleCollapser = require('bundle-collapser/plugin');
 
+
 var postcss = require('postcss'),
 	chokidar = require('chokidar'),
 	autoprefixer = require('autoprefixer'),
@@ -30,6 +31,11 @@ var colors = require('colors/safe');
 exports.js = function (options) {
 	options = options || {};
 
+	if (options.hot) {
+		options.watch = true;
+		options.debug = true;	
+	}
+
 	if (options.watch) {
 		assign(options, watchify.args);
 	}
@@ -38,8 +44,17 @@ exports.js = function (options) {
 	options.detectGlobals = false;
 
 	var bundler = browserify(options);
-
+	var babelPlugins = [];
 	if (options.watch) {
+		if(options.hot) {
+			babelPlugins.push(["react-transform", {
+	              transforms: [{
+	                  transform: "livereactload/babel-transform",
+	                  imports: ["react"]
+	              }]
+	          }]);
+			bundler.plugin(require('livereactload'));
+		}
 		var watcher = watchify(bundler);
 		watcher.on('update', function (files) {
 			files.forEach(changed);
@@ -55,10 +70,12 @@ exports.js = function (options) {
         .transform(babelify.configure({
 			presets: [
 				babelPresetEs2015,
-                babelPresetStage2,
+        babelPresetStage2,
 				babelPresetReact,
 			],
-            sourceMapRelative: '.'
+			plugins: babelPlugins, 
+      ignore: /node_modules\/ws/,
+      sourceMapRelative: '.'
 		}), {global: true})
         .transform(es3ify, {global: true})
 
@@ -82,6 +99,11 @@ exports.css = function (options) {
 
 	var watchedFiles = [],
 		postcssWatch = function () {};
+
+	if (options.hot) {
+		options.watch = true;
+		options.debug = true;	
+	}
 
 	if (options.watch) {
 		var watcher = chokidar.watch(watchedFiles);
@@ -162,9 +184,10 @@ function errorLogger(exit) {
 
 function processFiles(processor, options) {
 	var css = fs.readFileSync(options.entry, "utf8");
-
+	var processorOptions = {from: options.entry, to: options.output}
+	options.debug ? assign(processorOptions, {map: {inline: true}}) : processorOptions;
 	processor
-		.process(css, {from: options.entry, to: options.output})
+		.process(css,  processorOptions)
 		.then(function (result) {
 			built('CSS')();
 			fs.writeFileSync(options.output, result.css);
