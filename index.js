@@ -28,7 +28,7 @@ var babelPresetEs2015 = require('babel-preset-es2015-loose'),
 	
 var babelPluginReactTransform = require('babel-plugin-react-transform'),
 	liveReactLoad = require('livereactload'),
-	liveReactLoadBabelTransform = require('livereactload/babel-transform'),	
+	liveReactLoadBabelTransform = require('livereactload/babel-transform');	
 
 var colors = require('colors/safe');
 
