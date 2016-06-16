@@ -1,5 +1,4 @@
 require('es6-promise').polyfill();
-
 var fs = require('fs'),
 	path = require('path');
 
@@ -24,11 +23,12 @@ var postcss = require('postcss'),
 	
 var babelPresetEs2015 = require('babel-preset-es2015-loose'),
 	babelPresetReact = require('babel-preset-react'),
-	babelPresetStage2 = require('babel-preset-stage-2');
+	babelPresetStage = require('babel-preset-stage-0');
 	
 var babelPluginReactTransform = 'react-transform',
+	babelDecoratorTransform = require('babel-plugin-transform-decorators-legacy'),
 	liveReactLoad = require('livereactload'),
-	liveReactLoadBabelTransform = 'livereactload/babel-transform';	
+	liveReactLoadBabelTransform = 'livereactload/babel-transform';
 
 var colors = require('colors/safe');
 
@@ -60,6 +60,7 @@ exports.js = function (options) {
 	}
 	
 	var babelPlugins = [];
+	babelPlugins.push(babelDecoratorTransform.default);
 	if (options.hot) {
 		babelPlugins.push([
 			babelPluginReactTransform, 
@@ -78,8 +79,8 @@ exports.js = function (options) {
 		.transform(babelify.configure({
 			presets: [
 				babelPresetEs2015,
-				babelPresetStage2,
-				babelPresetReact,
+				babelPresetStage,
+				babelPresetReact
 			],
 			plugins: babelPlugins, 
 			ignore: /node_modules\/ws/,
