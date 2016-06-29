@@ -27,6 +27,7 @@ var babelPresetEs2015 = require('babel-preset-es2015-loose'),
 	
 var babelPluginReactTransform = 'react-transform',
 	babelDecoratorTransform = require('babel-plugin-transform-decorators-legacy'),
+	babelClassTransform = require('babel-plugin-transform-class-properties'),
 	liveReactLoad = require('livereactload'),
 	liveReactLoadBabelTransform = 'livereactload/babel-transform';
 
@@ -61,6 +62,7 @@ exports.js = function (options) {
 	
 	var babelPlugins = [];
 	babelPlugins.push(babelDecoratorTransform.default);
+	babelPlugins.push(babelClassTransform);
 	if (options.hot) {
 		babelPlugins.push([
 			babelPluginReactTransform, 
